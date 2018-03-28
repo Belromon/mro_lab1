@@ -1,12 +1,14 @@
 import java.awt.image.BufferedImage;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Analyser {
     private static final int lenght = 30;
     private static final int maskLength = 3;
-    private List<double[][]> functionInformation = new ArrayList<>();
+
+    private Map<Integer, double[][]> funcInf = new HashMap<>();
+
 
 
     private int[][] mask = {
@@ -65,7 +67,7 @@ public class Analyser {
         double[] minElementMatrix = new double[31];
         for (int i = 1; i < 31; i++) {
             minElementMatrix[i] += getMinElement(scanMatrixFiveMask(getMatrix(ImageLoader.loadImage("pics/res" + i + ".png"))));
-             System.out.println(minElementMatrix[i]);
+           //  System.out.println(minElementMatrix[i]);
         }
 
 
@@ -119,7 +121,7 @@ public class Analyser {
                 min = array[i];
             }
         }
-        System.out.println("Min from getMin" + min);
+       // System.out.println("Min from getMin" + min);
         return min;
     }
 
@@ -133,23 +135,26 @@ public class Analyser {
         }
         return max;
     }
-
-    public void getFunctionInformative(int pictureNumber) throws IOException {
+public  int[][] fuckThis=new int[100][100];
+    public int getFunctionInformative(int pictureNumber, int count) throws IOException {
+//        double[][] resultMatrix = scanMatrixFiveMask(getMatrix(ImageLoader.loadImage("pics/res" + pictureNumber + ".png")));
         double[][] resultMatrix = scanMatrixFiveMask(getMatrix(ImageLoader.loadImage("pics/res" + pictureNumber + ".png")));
         double max = getMaxFromArray(getMinElementMatrix());
         double min = getMinFromArray(getMinElementMatrix());
-        double[][] result = new double[5][5];
+        int[][] result = new int[5][5];
+        int matrix[][]=getMatrix((ImageLoader.loadImage("pics/res" + pictureNumber + ".png")));
         boolean flag = true;
+
 
         for (int i = 0; i < resultMatrix.length; i++) {
             for (int j = 0; j < resultMatrix.length; j++) {
-                System.out.print(resultMatrix[i][j] + "\t");
+         //       System.out.print(resultMatrix[i][j] + "\t");
             }
-            System.out.println();
+       //     System.out.println();
         }
 
-        System.out.println(min);
-        System.out.println(max);
+//        System.out.println(min);
+//        System.out.println(max);
 
         while (min <= max) {
             for (int i = 2; i < 28; i++) {
@@ -157,7 +162,7 @@ public class Analyser {
 
 
                     if (resultMatrix[i][j] == min) {
-                        for (int k = i - 2; k < i + 2; k++) {
+                        for (int k = i - 2; k < i + 3; k++) {
                             for (int l = j - 2; l < j + 3; l++) {
                                 if (resultMatrix[k][l] == -1) {
                                     flag = false;
@@ -166,13 +171,38 @@ public class Analyser {
                         }
 
                         if (flag) {
+//                            for (int o = 0; o < matrix.length; o++) {
+//                                for (int p = 0; p < matrix.length; p++) {
+//                                    System.out.print(matrix[o][p] + " ");
+//                                }
+//                                System.out.println();
+//                            }
+
+
                             for (int k = i - 2, n = 0; k < i + 3; k++, n++) {
-                                for (int l = i - 2, m = 0; l < i + 3; l++, m++) {
-                                    result[n][m] = resultMatrix[k][l];
+                                for (int l = j - 2, m = 0; l < j + 3; l++, m++) {
+                                    result[n][m] = matrix[k][l];
                                     resultMatrix[k][l] = -1;
                                 }
                             }
-                            functionInformation.add(result);
+                            int fuckAll=1;
+
+
+//                            for (int o = 0; o < result.length; o++) {
+//                                for (int p = 0; p < result.length; p++) {
+//                                    System.out.print(result[o][p] + " ");
+//                                }
+//                                System.out.println();
+//                            }
+
+                            fuckThis[count][0]=count;
+                            for (int k = 0; k < 5; k++) {
+                                for (int l = 0; l < 5; l++) {
+                                    fuckThis[count][fuckAll]=result[l][k];
+                                    fuckAll++;
+                                }
+                            }
+                            count ++;
 
                         }
 
@@ -183,36 +213,30 @@ public class Analyser {
             min++;
 
         }
-
-        for (int i = 0; i < resultMatrix.length; i++) {
-            for (int j = 0; j < resultMatrix.length; j++) {
-                System.out.print(resultMatrix[i][j] + "\t");
-            }
-            System.out.println();
-        }
-
-        System.out.println("---------");
-
-        System.out.println("---------");
-
 //
-//        for (int i = 0; i < result.length; i++) {
-//            for (int j = 0; j < result.length; j++) {
-//                System.out.print(result[i][j] + "\t");
+//        for (int i = 0; i < resultMatrix.length; i++) {
+//            for (int j = 0; j < resultMatrix.length; j++) {
+//                System.out.print(resultMatrix[i][j] + "\t");
 //            }
 //            System.out.println();
 //        }
+//
+//        System.out.println("---------");
+//
+//        System.out.println("---------");
+//
 
-        for (double a[][]: functionInformation
-             ) {
 
-            for (int i = 0; i < a.length; i++) {
-                for (int j = 0; j < a.length; j++) {
-                    System.out.print(a[i][j] + "\t");
-                }
-                System.out.println();
-            }
-        }
+//        for (double a[][]: funcInf) {
+//
+//            for (int i = 0; i < a.length; i++) {
+//                for (int j = 0; j < a.length; j++) {
+//                    System.out.print(a[i][j] + "\t");
+//                }
+//                System.out.println();
+//            }
+//        }
+        return count;
     }
 
 
