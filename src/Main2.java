@@ -1,20 +1,23 @@
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 
-public class Main {
+public class Main2 {
+
+    public  int[][] test1;
+
     public static void main(String[] args) throws IOException {
         Analyser analyser = new Analyser();
         BufferedImage image = ImageLoader.loadImage("pics/res1.png");
-         //DisplayImage.display(image);
-       int[][] a =  analyser.getMatrix(image);
-      // double[][] b = analyser.scanMatrix(a);
+        //DisplayImage.display(image);
+        int[][] a =  analyser.getMatrix(image);
+        // double[][] b = analyser.scanMatrix(a);
         double[] minElementMatrix = new double[31];
         minElementMatrix = analyser.getMinElementMatrix();
         analyser.getMinFromArray(minElementMatrix);
         //analyser.getMinElementMatrix();
-      //  analyser.getFunctionInformative(1);
+        //  analyser.getFunctionInformative(1);
 
-int countFunkInformativ=0;
+        int countFunkInformativ=0;
         for (int i = 1; i <= 30; i++) {
             countFunkInformativ = analyser.getFunctionInformative(i, countFunkInformativ);
         }
@@ -30,17 +33,17 @@ int countFunkInformativ=0;
             System.out.println();
 
         }
-         int[][]test1=test;
-       // System.out.println(analyser.fuckThis.length);
+         test1=test;
+        // System.out.println(analyser.fuckThis.length);
         Spectr spectr = new Spectr();
         spectr.createFourTable(countFunkInformativ, test);
 //
 //        Gui gui = new Gui();
 //        Graphics g = gui.getGraphics();
 //        gui.paint(g);
-
-
+        
 //System.out.println(fuck);
+
 
 
     }

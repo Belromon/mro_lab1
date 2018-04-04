@@ -67,7 +67,7 @@ public class Analyser {
         double[] minElementMatrix = new double[31];
         for (int i = 1; i < 31; i++) {
             minElementMatrix[i] += getMinElement(scanMatrixFiveMask(getMatrix(ImageLoader.loadImage("pics/res" + i + ".png"))));
-           //  System.out.println(minElementMatrix[i]);
+            // System.out.println(minElementMatrix[i]);
         }
 
 
@@ -135,7 +135,7 @@ public class Analyser {
         }
         return max;
     }
-public  int[][] fuckThis=new int[100][100];
+public  int[][] AllMass=new int[100][100];
     public int getFunctionInformative(int pictureNumber, int count) throws IOException {
 //        double[][] resultMatrix = scanMatrixFiveMask(getMatrix(ImageLoader.loadImage("pics/res" + pictureNumber + ".png")));
         double[][] resultMatrix = scanMatrixFiveMask(getMatrix(ImageLoader.loadImage("pics/res" + pictureNumber + ".png")));
@@ -185,7 +185,7 @@ public  int[][] fuckThis=new int[100][100];
                                     resultMatrix[k][l] = -1;
                                 }
                             }
-                            int fuckAll=1;
+                            int All=1;
 
 
 //                            for (int o = 0; o < result.length; o++) {
@@ -195,11 +195,11 @@ public  int[][] fuckThis=new int[100][100];
 //                                System.out.println();
 //                            }
 
-                            fuckThis[count][0]=count;
+                            AllMass[count][0]=count;
                             for (int k = 0; k < 5; k++) {
                                 for (int l = 0; l < 5; l++) {
-                                    fuckThis[count][fuckAll]=result[l][k];
-                                    fuckAll++;
+                                    AllMass[count][All]=result[l][k];
+                                    All++;
                                 }
                             }
                             count ++;
@@ -238,6 +238,7 @@ public  int[][] fuckThis=new int[100][100];
 //        }
         return count;
     }
+
 
 
 }
