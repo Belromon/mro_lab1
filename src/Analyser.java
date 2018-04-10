@@ -1,15 +1,26 @@
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class Analyser {
     private static final int lenght = 30;
     private static final int maskLength = 3;
-
+    Main2 m = new Main2();
     private Map<Integer, double[][]> funcInf = new HashMap<>();
 
+    double minMin;
+    double maxMin;
 
+    public double retMinMin() {
+        return minMin;
+    }
+
+
+    public double retMaxMin() {
+        return maxMin;
+    }
 
     private int[][] mask = {
             {1, 1, 1},
@@ -18,6 +29,19 @@ public class Analyser {
 
     public int[][] getMatrix(BufferedImage image) {
         int[][] matrix = new int[image.getHeight()][image.getWidth()];
+
+        for (int i = 0; i < image.getHeight(); i++) {
+            for (int j = 0; j < image.getWidth(); j++) {
+                if (image.getRGB(i, j) == -16777216) {
+                    matrix[i][j] = 1;
+                }
+            }
+        }
+        return matrix;
+    }
+
+    public double[][] getMatrixD(BufferedImage image) {
+        double[][] matrix = new double[image.getHeight()][image.getWidth()];
 
         for (int i = 0; i < image.getHeight(); i++) {
             for (int j = 0; j < image.getWidth(); j++) {
@@ -51,6 +75,7 @@ public class Analyser {
 
         return result;
     }
+
 
     public double getMinElement(double[][] matrix) {
         double minMatrElement = 150;
@@ -113,6 +138,38 @@ public class Analyser {
         return result;
     }
 
+    public double[][] scanMatrixFiveMaskD(double[][] matrix) {
+        double[][] result = new double[lenght][lenght];
+
+
+        for (int i = 0; i < lenght; i++) {
+            for (int j = 0; j < lenght; j++) {
+                double x = 0.0;
+                int i2, j2 = 0;
+                for (int k = i - 2; k <= i + 2; k++) {
+                    i2 = 0;
+                    for (int l = j - 2; l <= j + 2; l++) {
+                        if ((k < 0 || l < 0) || (k >= lenght || l >= lenght))
+                            x += Math.pow(0 - mask5[i2][j2], 2);
+                        else
+                            x += Math.pow(matrix[k][l] - mask5[i2][j2], 2);
+                        i2++;
+
+                    }
+
+                    j2++;
+                }
+                //  System.out.print(x +"\t");
+
+                result[i][j] = x;
+            }
+            //     System.out.println();
+        }
+
+
+        return result;
+    }
+
     public double getMinFromArray(double[] array) {
         double min = 100;
 
@@ -121,7 +178,7 @@ public class Analyser {
                 min = array[i];
             }
         }
-       // System.out.println("Min from getMin" + min);
+        // System.out.println("Min from getMin" + min);
         return min;
     }
 
@@ -133,29 +190,32 @@ public class Analyser {
                 max = array[i];
             }
         }
-        return max;
+        return max + 1;
     }
-public  int[][] AllMass=new int[100][100];
+
+    public int[][] AllMass = new int[1000][100];
+
     public int getFunctionInformative(int pictureNumber, int count) throws IOException {
 //        double[][] resultMatrix = scanMatrixFiveMask(getMatrix(ImageLoader.loadImage("pics/res" + pictureNumber + ".png")));
         double[][] resultMatrix = scanMatrixFiveMask(getMatrix(ImageLoader.loadImage("pics/res" + pictureNumber + ".png")));
         double max = getMaxFromArray(getMinElementMatrix());
         double min = getMinFromArray(getMinElementMatrix());
         int[][] result = new int[5][5];
-        int matrix[][]=getMatrix((ImageLoader.loadImage("pics/res" + pictureNumber + ".png")));
+        int matrix[][] = getMatrix((ImageLoader.loadImage("pics/res" + pictureNumber + ".png")));
         boolean flag = true;
 
 
         for (int i = 0; i < resultMatrix.length; i++) {
             for (int j = 0; j < resultMatrix.length; j++) {
-         //       System.out.print(resultMatrix[i][j] + "\t");
+                //       System.out.print(resultMatrix[i][j] + "\t");
             }
-       //     System.out.println();
+            //     System.out.println();
         }
 
 //        System.out.println(min);
 //        System.out.println(max);
-
+        minMin = min;
+        maxMin = max;
         while (min <= max) {
             for (int i = 2; i < 28; i++) {
                 for (int j = 2; j < 28; j++) {
@@ -185,7 +245,7 @@ public  int[][] AllMass=new int[100][100];
                                     resultMatrix[k][l] = -1;
                                 }
                             }
-                            int All=1;
+                            int All = 1;
 
 
 //                            for (int o = 0; o < result.length; o++) {
@@ -195,14 +255,14 @@ public  int[][] AllMass=new int[100][100];
 //                                System.out.println();
 //                            }
 
-                            AllMass[count][0]=count;
+                            AllMass[count][0] = count;
                             for (int k = 0; k < 5; k++) {
                                 for (int l = 0; l < 5; l++) {
-                                    AllMass[count][All]=result[l][k];
+                                    AllMass[count][All] = result[l][k];
                                     All++;
                                 }
                             }
-                            count ++;
+                            count++;
 
                         }
 
@@ -237,8 +297,90 @@ public  int[][] AllMass=new int[100][100];
 //            }
 //        }
         return count;
+
     }
 
 
+    public List<Image> method(List<Image> imageList, int nImg, double[][] matr, double[][] resultMatrix1, double min1, double max1, double[] name1, double[] name2, double[] name3) throws IOException {
 
+        double max = getMaxFromArray(getMinElementMatrix());
+        double min = getMinFromArray(getMinElementMatrix());
+
+        double[][] resultMatrix = scanMatrixFiveMask(getMatrix(ImageLoader.loadImage("pics/res" + nImg + ".png")));
+boolean flag=true;
+        while (min <= max) {
+            for (int i = 2; i < 28; i++) {
+                for (int j = 2; j < 28; j++) {
+
+
+
+                        if (resultMatrix[i][j] == min) {
+                            for (int k = i - 2; k < i + 3; k++) {
+                                for (int l = j - 2; l < j + 3; l++) {
+                                    if (resultMatrix[k][l] == -1) {
+                                        flag = false;
+                                    }
+                                }
+                            }
+
+                            if (flag) {
+                                Image image = new Image(nImg);
+                                for (int k = i - 2, n = 0; k < i + 3; k++, n++) {
+                                    for (int l = j - 2, m = 0; l < j + 3; l++, m++) {
+
+                                        resultMatrix[k][l] = -1;
+                                    }
+                                }
+                                int All = 1;
+
+                                imageList.add(image);
+//
+                            }
+                            else flag = true;
+                        }
+
+
+
+                }
+
+                min++;
+            }
+//
+//        while (min <= max) {
+//
+//            for (int i = 2; i < 28; i++) {
+//                for (int k = 2; k < 28; k++) {
+//                    if (matr2[i][k] == min) {
+//                        Image image = new Image(nImg);
+//                        for (int m = i - 2; m < i + 3; m++) {
+//                            for (int l = k - 2; l < k + 3; l++) {
+//
+//                                matr2[m][l] = -1;
+//                            }
+//                        }
+//
+//                        for (int j = 0; j < name1.length; j++) {
+//                            if(i == name1[j]){
+//                                image.Imageclass = 1;
+//                            }
+//                        }
+//                        for (int j = 0; j < name2.length; j++) {
+//                            if(i == name2[j]){
+//                                image.Imageclass = 2;
+//                            }
+//                        }
+//                        for (int j = 0; j < name3.length; j++) {
+//                            if(i == name3[j]){
+//                                image.Imageclass = 3;
+//                            }
+//                        }
+//                        imageList.add(image);
+//                    }
+//                }
+//            }
+//            min++;
+//        }
+        }
+        return imageList;
+    }
 }
